@@ -1,17 +1,18 @@
-#macro grav 0.25
-#macro MAX_FALL_SPEED 8
-#macro TILE_SIZE 32
-#macro LEDGE_CORRECTION 4
-#macro CORNER_CORRECTION 4
+#macro grav 0.25 // Value of gravity
+#macro MAX_FALL_SPEED 8 // Maximum fall speed in pixels
+#macro TILE_SIZE 32 // The size of the tiles in the game, important for the collision system
+#macro LEDGE_CORRECTION 4 //how many pixels of correction to help you land on terrain
+#macro CORNER_CORRECTION 4 // how many pixels of correction to continue going up if you hit a corner
+#macro COYOTE 6 // Number of frames that you have to jump after falling
 
+// This col_bit enum is used in bitwise operation for special checks
+// You can add more to the enum and the system to check if you're standing uniquely on a type of ground
 enum col_bit {
 	none = 0,
-	wall = 1,
+	wall = 1, // the wall and slope one are necessary
 	slope = 2,
-	platform = 4,
-}{
-     // code here
- }
+	platform = 4, // This one is used to check if you're standing on a platform and nothing else
+}
 
 //Try to always have a mask that is an even number of pixels, which means an odd number in terms of the inspector values
 /// @function collision_actor_init()

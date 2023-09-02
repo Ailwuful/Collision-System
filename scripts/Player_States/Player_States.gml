@@ -43,9 +43,13 @@ function player_air() {
 			hspeed = lerp(hspeed, 0, decel);
 		}
 		
-		if (coyote > 0 and input.up_pressed) {
+		//Coyote Time
+		if (coyote > 0) {
 			coyote--;
-			jump();
+			if (input.up_pressed) {
+				coyote = 0;
+				jump();
+			}
 		}
 	}
 	

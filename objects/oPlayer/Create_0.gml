@@ -45,7 +45,7 @@ jump = function(_speed = 6) {
 
 fall = function() {
 	state(playerState.air);
-	coyote = 5;
+	coyote = COYOTE;
 }
 
 can_grab = true;
