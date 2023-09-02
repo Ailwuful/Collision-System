@@ -1,0 +1,60 @@
+// You don't need to drag the input object somewhere, the script already does that to the first room of the game
+// You can use an enum to name your input numbers
+
+enum INPUT {
+	player1,
+	player2,
+	menu
+}
+
+// You need to pass a struct as an argument with the verbs and keys for those verbs
+// the keys can be in an array for multiple input for the same thing
+// or just a single value not in an array
+
+var _input = {
+	left : [vk_left, gp_padl],
+	right : [vk_right, gp_padr],
+	accept : [vk_space, gp_face1],
+	cancel : [vk_esc, gp_face2],
+	esc : vk_escape
+}
+input_create(INPUT.menu, _input);
+
+// You can then get the input where you require in a step event or wherever
+
+var _input = input_get(INPUT.player1);
+
+if (_input.right) //Move to the right
+
+// Every input will already come with a _pressed and _released variation
+if (_input.attack_pressed) // Do attack
+
+// Also, every input you create will have a m_x and m_y for mouse positions,
+// and a mg_x and mg_y for mouse gui positions
+if (position_meeting(_input.mg_x, _input.mg_y, oButton)) // You're on top of a button 
+
+// You can add a buffer so a button counts as pressed frames after it's been pressed
+input_buffer_add(INPUT.player1, "jump", 4);
+//if you add a buffer, then verb_pressed will return true for the number of frames
+//passed as the buffer argument
+
+// You can add a stutter when you have a button pressed, useful for menus
+input_stutter_add(INPUT.menu, "left", 20, 10);
+// if you add a stutter, then a verb check will return true only at certain frames
+
+// You can add an AXIS to count as a button along with other inputs
+// by using a special enum in the script: INPUT_AXIS
+// but if you want to use an axis as normal, it needs to be in its own verb
+// Example
+var _input = {
+	left : [vk_left, INPUT_AXIS.AXIS_L_LEFT],
+	axisl_h : gp_axislh,
+}
+
+// You can change keys for verbs that were created
+input_key_change(INPUT.player1, "attack", [ord("H"), gp_face3]);
+
+// And if needed you can change the deadzone of an input
+input_deadzone(INPUT.player1, 0.25)
+// This is not the same as changing the deadzone of the gamepad, it just changes
+// how much you move the axis to count as true in this input system
