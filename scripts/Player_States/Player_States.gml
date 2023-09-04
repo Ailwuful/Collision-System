@@ -58,7 +58,7 @@ function player_air() {
 		
 		var _collided = 0;
 		var _vspeed = vspeed;
-		vspeed += grav;
+		vspeed += GRAVITY;
 		if (_vspeed < 0) {
 			collision_move("move_air_up");
 			if (_vspeed > -2) wall_jump();

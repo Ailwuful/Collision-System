@@ -1,4 +1,4 @@
-#macro grav 0.25 // Value of gravity
+#macro GRAVITY 0.25 // Value of gravity
 #macro MAX_FALL_SPEED 8 // Maximum fall speed in pixels
 #macro TILE_SIZE 32 // The size of the tiles in the game, important for the collision system
 #macro LEDGE_CORRECTION 4 //how many pixels of correction to help you land on terrain
@@ -22,7 +22,7 @@ function collision_actor_init() {
 	collision_halfmask = ((bbox_right - bbox_left) * 0.5); //this is used to move the instance close to the wall, but this value assumes your origin point is in the middle of the instance
 	collision_maskheight = bbox_bottom - bbox_top; //this is used to move the instance close to the wall, but this value assumes your origin point is in the bottom of the instance
 	collision_slope = noone; //Slopes require special code to be handled with walls, so when in collision with a slope I store it in this variable
-	ground_bit = 0; //this can be used to know what kind of ground you're stepping on, important for special behavior like checking if you're solely on a platform and can drop down. Check the Bitwise operations in the manual for knowledge.
+	ground_bit = col_bit.wall; //this can be used to know what kind of ground you're stepping on, important for special behavior like checking if you're solely on a platform and can drop down. Check the Bitwise operations in the manual for knowledge.
 	ground_link = noone; //this is used to link the character to the ground so it moves along with the ground, like with moving platforms
 	ground_sound = -1; //this variable stores which sound steps should make when moving on the ground
 	ground_speed = 1; //this can be used to change the speed a character can move in this ground
@@ -62,7 +62,7 @@ function collision_check() {
 			if (_bit == col_bit.slope) {
 				if (x mod _id.x <= TILE_SIZE) {
 					collision_slope = _id;
-					ground_bit |= _bit;
+					ground_bit = _bit;
 				}
 			}else {
 				array_push(collision_array, _id);
@@ -104,7 +104,7 @@ function collision_ground_check() {
 	
 	if (_num > 0 and collision_slope == noone) {
 		// I will assume you're never in collision on the ground with more than 2 different things, not counting slopes
-		if (_num > 1) {
+		if (_num > 1) { //In case character is stepping in more than one type of ground
 			var _distance_1 = 0;
 			var _distance_2 = 0;
 			with (_list[| 0]) {
@@ -113,23 +113,39 @@ function collision_ground_check() {
 			with (_list[| 1]) {
 				_distance_2 = distance_to_point(other.x, other.y);
 			}
+			// I'm checking distance to know which ground I should get the speed and acceleration and sound
 			i = _distance_1 < _distance_2 ? 0 : 1;
-		}else {
+			_id = _list[| i];
+			if (_id.object_index == oCollision) {
+				ground_speed = global.collisions[_id.image_index].collision_speed;
+				ground_acceleration = global.collisions[_id.image_index].collision_acceleration;
+				ground_sound = global.collisions[_id.image_index].collision_sound;
+			}else {
+				ground_speed = _id.collision_speed;
+				ground_acceleration = _id.collision_acceleration;
+				ground_sound = _id.collision_sound;
+			}
 			i = 0;
-		}
-		
-		_id = _list[| i];
-		if (_id.object_index == oCollision) {
-			ground_bit |= global.collisions[_id.image_index].collision_bit;
-			ground_speed = global.collisions[_id.image_index].collision_speed;
-			ground_acceleration = global.collisions[_id.image_index].collision_acceleration;
-			ground_sound = global.collisions[_id.image_index].collision_sound;
-		}else {
-			ground_bit |= _id.collision_bit;
-			ground_speed = _id.collision_speed;
-			ground_acceleration = _id.collision_acceleration;
-			ground_sound = _id.collision_sound;
-			ground_link = _id.collision_link;
+			// But I always want to know if I'm stepping in more than one type of ground
+			repeat (_num) {
+				_id = _list[| i++];
+				if (_id.object_index == oCollision) ground_bit |= global.collisions[_id.image_index].collision_bit;
+				else ground_bit |= _id.collision_bit;
+			}
+		}else { //In case I'm colliding with just one instance of ground
+			// I don't want to link the character to the ground unless it's the only ground the character is stepping
+			if (_id.object_index == oCollision) {
+				ground_bit = global.collisions[_id.image_index].collision_bit;
+				ground_speed = global.collisions[_id.image_index].collision_speed;
+				ground_acceleration = global.collisions[_id.image_index].collision_acceleration;
+				ground_sound = global.collisions[_id.image_index].collision_sound;
+			}else {
+				ground_bit = _id.collision_bit;
+				ground_speed = _id.collision_speed;
+				ground_acceleration = _id.collision_acceleration;
+				ground_sound = _id.collision_sound;
+				ground_link = _id.collision_link;
+			}
 		}
 	}
 	
@@ -148,10 +164,14 @@ function collision_move(_method) {
 	
 	if (collision_slope != noone) {
 		if (_colnum > 0) {
-			_id = collision_array[0];
-			if (collision_slope.y != _id.y) {
-				if (_id.object_index == oCollision) _collided |= global.collisions[_id.image_index][$ _method](_id);
-				else _collided |= _id[$ _method](_id);
+			var i = 0;
+			repeat (_colnum) {
+				_id = collision_array[i];
+				if (collision_slope.y != _id.y or _id.object_index != oCollision or (_id.object_index == oCollision and global.collisions[_id.image_index].collision_bit != col_bit.wall)) {
+					if (_id.object_index == oCollision) _collided |= global.collisions[_id.image_index][$ _method](_id);
+					else _collided |= _id[$ _method](_id);
+				}
+				i++;
 			}
 		}
 		_collided |= global.collisions[collision_slope.image_index][$ _method](collision_slope);

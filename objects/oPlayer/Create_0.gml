@@ -121,9 +121,9 @@ wall_jump = function() {
 			}
 		}
 	}else {
-		wall_jump_buffer--;
-		if (wall_jump_buffer > 0 and input.up_pressed) {
-			jump();
+		if (wall_jump_buffer > 0) {
+			wall_jump_buffer--;
+			if (input.up_pressed) jump();
 		}
 	}
 }

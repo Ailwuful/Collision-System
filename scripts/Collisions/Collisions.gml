@@ -335,5 +335,16 @@ global.collisions[COLLISION_TILE.SOLID_SLIPPERY] = {
 	move_air_down : method(self, move_vertical_down_default)
 }
 
+global.collisions[COLLISION_TILE.SOLID_SLIPPERY] = {
+	collision_bit : col_bit.wall,
+	collision_acceleration : 0.1,
+	collision_speed : 1,
+	collision_sound : -1,
+	
+	move_ground : method(self, move_ground_default),
+	move_air_up : method(self, move_vertical_up_default),
+	move_air_down : method(self, move_vertical_down_default)
+}
+
 global.collisions[COLLISION_TILE.LEDGE_GRAB] = new collision_tile_template();
 global.collisions[COLLISION_TILE.WALL_JUMP] = new collision_tile_template();
