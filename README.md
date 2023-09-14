@@ -7,7 +7,7 @@ How does it work?
 
 1. oSystem has a Room Start event that will look for a layer named "Collisions", and upon finding
 one it will automatically create instances of the oCollision object in the room to be used in
-as collisions.
+as collisions. It also stretches the instances horizontally and vertically when possible to save up on memory.
 
 2. oCollision has a sprite that has shapes to be collided with and they represent what type of
 collision should happen. The image_index of the sprCollisionTiles has to match the index of the
