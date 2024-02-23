@@ -81,7 +81,7 @@ function collision_ground_check() {
 	var _list = ds_list_create();
 	// The +1 and -1 to bboxes is not ideal but necessary because collision_rectangle rounds values and it can return true when you're not really colliding with something
 	// The values on this rectangle can be changed to fit the needs of your game
-	var _num = collision_rectangle_list(bbox_left + 1, bbox_bottom, bbox_right - 1, bbox_bottom + 5, oCollision, true, false, _list, false);
+	var _num = collision_rectangle_list(bbox_left + collision_halfmask*.5, bbox_bottom, bbox_right - collision_halfmask*.5, bbox_bottom + 5, oCollision, true, false, _list, false);
 	var _id = noone;
 	
 	var i = 0;
@@ -258,7 +258,7 @@ function collision_tile_template() constructor {
 	move_air_down = function(_col) {
 		with (other) {
 			//Check if landing somewhere first and Checking collision again since another collision may already have stopped me
-			if (yprevious <= _col.bbox_top + 0.5 and place_meeting(x, y, _col)) {
+			if (yprevious <= _col.bbox_top + 0.5 and place_meeting(xprevious, y, _col)) {
 				y = _col.bbox_top;
 				vspeed = 0;
 				return COLLIDED.DOWN;
@@ -345,7 +345,7 @@ function move_vertical_up_default(_col) {
 ///@return {Real}
 function move_vertical_down_default(_col) {
 	with (other) {
-		if (yprevious <= _col.bbox_top + 0.5 and place_meeting(x, y, _col)) {
+		if (yprevious <= _col.bbox_top + 0.5 and place_meeting(xprevious, y, _col)) {
 			y = _col.bbox_top;
 			vspeed = 0;
 			return COLLIDED.DOWN;
