@@ -163,6 +163,10 @@ function collision_move(_method) {
 	if (ground_link != noone) ground_link.move_other();
 	
 	if (collision_slope != noone) {
+		// Move instance according to the slope first
+		_collided |= global.collisions[collision_slope.image_index][$ _method](collision_slope);
+		
+		// Then check if there are collisions with more stuff that is not at the same height of the slope and move accordingly
 		if (_colnum > 0) {
 			var i = 0;
 			repeat (_colnum) {
@@ -174,7 +178,6 @@ function collision_move(_method) {
 				i++;
 			}
 		}
-		_collided |= global.collisions[collision_slope.image_index][$ _method](collision_slope);
 	}
 	else if (_colnum > 0) {
 		var i = 0;
