@@ -22,6 +22,9 @@ enum COLLISION_TILE {
 	SOLID_SLIPPERY,
 	LEDGE_GRAB,
 	WALL_JUMP,
+	SLOPE_ROUND_DOWN,
+	SOLID_SMALL,
+	SLOPE_ROUND_UP,
 	LAST
 }
 
@@ -344,6 +347,106 @@ global.collisions[COLLISION_TILE.SOLID_SLIPPERY] = {
 	move_ground : method(self, move_ground_default),
 	move_air_up : method(self, move_vertical_up_default),
 	move_air_down : method(self, move_vertical_down_default)
+}
+
+global.collisions[COLLISION_TILE.SLOPE_ROUND_DOWN] = {
+	collision_bit : col_bit.slope,
+	collision_acceleration : 1,
+	collision_speed : 1,
+	collision_sound : -1,
+	height_array : [31, 30, 29, 29, 28, 28, 27, 27, 26, 26, 26, 25, 25, 25, 24, 24, 23, 23, 23, 23, 22, 22, 22, 21, 21, 21, 21, 21, 20, 20, 20, 20],
+	
+	move_ground : function(_col) {
+		var _x = other.x mod _col.x;
+		if (_x <= TILE_SIZE) {
+			other.y = _col.bbox_bottom - height_array[_x];
+		}
+		return COLLIDED.NONE;
+	},
+	move_air_up : function(_col) {
+		with (other) {
+			var _x = x mod _col.x,
+				_y = _col.bbox_bottom - other.height_array[_x];
+			if (_x <= TILE_SIZE) {
+				if (y >= _y) {
+					y = _y;
+					return COLLIDED.DOWN;
+				}
+			}
+			return COLLIDED.NONE;
+		}
+	},
+	move_air_down : function(_col) {
+		with (other) {
+			var _x = x mod _col.x,
+				_y = _col.bbox_bottom - other.height_array[_x];
+			if (_x <= TILE_SIZE) {
+				if (y >= _y) {
+					y = _y;
+					return COLLIDED.DOWN;
+				}
+			}
+		}
+		return COLLIDED.NONE;
+	}
+}
+
+global.collisions[COLLISION_TILE.SOLID_SMALL] = {
+	collision_bit : col_bit.wall,
+	collision_acceleration : 1,
+	collision_speed : 1,
+	collision_sound : -1,
+	
+	move_ground : method(self, move_ground_default),
+	move_air_up : method(self, move_vertical_up_default),
+	move_air_down : function(_col) {
+		if (other.y >= _col.bbox_top + 12) {
+			other.y = _col.bbox_top + 12;
+			return COLLIDED.DOWN;
+		}
+		return COLLIDED.NONE;
+	}
+}
+
+global.collisions[COLLISION_TILE.SLOPE_ROUND_UP] = {
+	collision_bit : col_bit.slope,
+	collision_acceleration : 1,
+	collision_speed : 1,
+	collision_sound : -1,
+	height_array : [20, 20, 20, 20, 21, 21, 21, 21, 21, 22, 22, 22, 23, 23, 23, 23, 24, 24, 25, 25, 25, 26, 26, 26, 27, 27, 28, 28, 29, 29, 30, 31],
+	move_ground : function(_col) {
+		var _x = other.x mod _col.x;
+		if (_x <= TILE_SIZE) {
+			other.y = _col.bbox_bottom - height_array[_x];
+		}
+		return COLLIDED.NONE;
+	},
+	move_air_up : function(_col) {
+		with (other) {
+			var _x = x mod _col.x,
+				_y = _col.bbox_bottom - other.height_array[_x];
+			if (_x <= TILE_SIZE) {
+				if (y >= _y) {
+					y = _y;
+					return COLLIDED.DOWN;
+				}
+			}
+			return COLLIDED.NONE;
+		}
+	},
+	move_air_down : function(_col) {
+		with (other) {
+			var _x = x mod _col.x,
+				_y = _col.bbox_bottom - other.height_array[_x];
+			if (_x <= TILE_SIZE) {
+				if (y >= _y) {
+					y = _y;
+					return COLLIDED.DOWN;
+				}
+			}
+		}
+		return COLLIDED.NONE;
+	}
 }
 
 global.collisions[COLLISION_TILE.LEDGE_GRAB] = new collision_tile_template();
