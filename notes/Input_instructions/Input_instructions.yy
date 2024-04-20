@@ -1,9 +1,11 @@
 {
-  "resourceType": "GMNotes",
-  "resourceVersion": "1.1",
-  "name": "Input_instructions",
-  "parent": {
-    "name": "Input",
-    "path": "folders/Libraries/Input.yy",
+  "$GMNotes":"",
+  "%Name":"Input_instructions",
+  "name":"Input_instructions",
+  "parent":{
+    "name":"Input",
+    "path":"folders/Libraries/Input.yy",
   },
+  "resourceType":"GMNotes",
+  "resourceVersion":"2.0",
 }

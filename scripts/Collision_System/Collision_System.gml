@@ -16,7 +16,7 @@ enum col_bit {
 
 //Try to always have a mask that is an even number of pixels, which means an odd number in terms of the inspector values
 /// @function collision_actor_init()
-/// @desc Initializes necessary variables for things that need to use the collision system
+/// @desc Initializes necessary variables for instances that need to use to collide with things
 function collision_actor_init() {
 	collision_array = array_create(0); //this is maintained to know what you've been in collision with this frame
 	collision_halfmask = ((bbox_right - bbox_left) * 0.5); //this is used to move the instance close to the wall, but this value assumes your origin point is in the middle of the instance
@@ -38,9 +38,14 @@ function collision_object_init() {
 	collision_sound = -1; //this variable is passed to the actor when they step on this instance. To be used to make stepping sounds.
 	collision_link = noone; //this is used to link the character to the ground so it moves along with the ground, like with moving platforms
 	
+	// Creates default methods for movement when colliding or stepping on instance. These methods can be changed in the object's create event
 	move_ground = method(self, move_ground_default); //Creating a method function with move_ground_default behaviour bound to the instance
 	move_air_up = method(self, move_vertical_up_default);
 	move_air_down = method(self, move_vertical_down_default);
+	move_other = function(_col) { // Default behavior for moving instances on top of the object. If the object moves horizontally the instance moves with it.
+		other.x += x - xprevious;
+		other.y = bbox_top;
+	}
 }
 
 ///@function	collision_check()
@@ -77,6 +82,7 @@ function collision_check() {
 
 ///@function	collision_ground_check()
 ///@desc		Checks a rectangle area on the feet of the instance to check what the instance is stepping on.
+///				Check the ground after collision_check().
 function collision_ground_check() {
 	var _list = ds_list_create();
 	// The +1 and -1 to bboxes is not ideal but necessary because collision_rectangle rounds values and it can return true when you're not really colliding with something
@@ -139,6 +145,8 @@ function collision_ground_check() {
 				ground_speed = global.collisions[_id.image_index].collision_speed;
 				ground_acceleration = global.collisions[_id.image_index].collision_acceleration;
 				ground_sound = global.collisions[_id.image_index].collision_sound;
+				// Add the ground to the collision array so character can stand on it
+				array_push(collision_array, _id);
 			}else {
 				ground_bit = _id.collision_bit;
 				ground_speed = _id.collision_speed;
@@ -291,10 +299,12 @@ function move_ground_default(_col) {
 	with (other) {
 		if (bbox_right - (x - xprevious) <= _col.bbox_left + 0.5) {
 			x = _col.bbox_left - collision_halfmask;
+			hspeed = 0;
 			return COLLIDED.RIGHT;
 		}
 		else if (bbox_left - (x - xprevious) >= _col.bbox_right - 0.5) {
 			x = _col.bbox_right + collision_halfmask;
+			hspeed = 0;
 			return COLLIDED.LEFT;
 		}
 		else {
@@ -366,5 +376,49 @@ function move_vertical_down_default(_col) {
 			}
 		}
 		return COLLIDED.NONE;
+	}
+}
+
+///@function	tilemap_create_collision()
+///@desc		Looks for a tilemap layer named Collisions and creates collision instances automatically
+function tilemap_create_collision() {
+	//This code will read the Collisions layer and create oCollision instances in place of the collision tiles.
+	var tilemap = layer_tilemap_get_id(layer_get_id("Collisions"));
+	layer_set_visible("Collisions",false);
+	var w = room_width div TILE_SIZE,
+		h = room_height div TILE_SIZE,
+		inst, tile, index;
+	
+	var col_layer = layer_create(0,"Collision_Objects");
+
+	for (var o = 0; o < h; o++) {
+		for (var i = 0; i < w; i++) {
+			tile = tilemap_get(tilemap,i,o);
+			index = tile_get_index(tile);
+			if (index != 0) {
+				inst = instance_create_layer(i*TILE_SIZE,o*TILE_SIZE,col_layer,oCollision);
+				inst.image_index = index;
+			
+				// This while stretches the instance horizontally to conserve number of oCollision instances
+				if (tile_get_index(tilemap_get(tilemap,i+1,o)) == index) {
+					var _i = i;
+					// Stretch horizontally
+					while(tile_get_index(tilemap_get(tilemap,i+1,o)) == index) {
+						inst.image_xscale++;
+						i++;
+					}
+				}
+				// This while stretches the instance vertically, but we don't want to add to o in this case since it will mess the loop
+				else if (tile_get_index(tilemap_get(tilemap,i,o+1)) == index) {
+					var _o = o;
+					while(tile_get_index(tilemap_get(tilemap,i,_o+1)) == index) {
+						//We set the tile to 0 so next time the for loop reaches this tile, it doesn't create another instance on top of the stretched one
+						tilemap_set(tilemap, 0, i, _o+1);
+						inst.image_yscale++;
+						_o++;
+					}
+				}
+			}
+		}
 	}
 }

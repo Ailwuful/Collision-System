@@ -397,7 +397,12 @@ global.collisions[COLLISION_TILE.SOLID_SMALL] = {
 	collision_speed : 1,
 	collision_sound : -1,
 	
-	move_ground : method(self, move_ground_default),
+	move_ground : function(_col) {
+		if (other.y >= _col.bbox_top + 12) {
+			other.y = _col.bbox_top + 12;
+		}
+		return COLLIDED.NONE;
+	},
 	move_air_up : method(self, move_vertical_up_default),
 	move_air_down : function(_col) {
 		if (other.y >= _col.bbox_top + 12) {

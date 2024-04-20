@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "Input_system",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Input",
-    "path": "folders/Libraries/Input.yy",
+  "$GMScript":"",
+  "%Name":"Input_system",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Input_system",
+  "parent":{
+    "name":"Input",
+    "path":"folders/Libraries/Input.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

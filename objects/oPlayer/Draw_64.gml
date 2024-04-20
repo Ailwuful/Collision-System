@@ -1,4 +1,14 @@
-draw_text(20,20,x);
-draw_text(20,40,y);
-draw_text(20,60,ground_bit);
-draw_text(20,80,state_active);
+var ground = ground_bit;
+if (ground == col_bit.none) ground = "Nothing";
+else if (ground == col_bit.wall) ground = "Wall";
+else if (ground == col_bit.slope) ground = "Slope";
+else if (ground == col_bit.platform) ground = "Platform";
+else if (ground == col_bit.wall + col_bit.slope) ground = "Wall and Slope";
+else if (ground == col_bit.wall + col_bit.platform) ground = "Wall and Platform";
+draw_text(20, 20, $"Player x:{x}, y:{y}");
+draw_text(20, 60, "Standing on: " + ground);
+var _state = state_active;
+if (_state == playerState.ground) _state = "Ground state";
+if (_state == playerState.air) _state = "Air state";
+if (_state == playerState.ledgeHang) _state = "LedgeHang state";
+draw_text(20, 100, _state);

@@ -8,6 +8,9 @@ var keys = {
 input_create(0, keys);
 input_buffer_add(0, "up", 6);
 
-//There's a bug of stopping on a vertical wall when moving towards it when
-//There's a jump wall beneath a solid wall
-//Another bug with not falling from platform when moving towards the wall
+font_enable_effects(Font1, true, {
+	outlineEnable : true,
+	outlineDistance : 2,
+	outlineColour : c_black
+});
+draw_set_font(Font1);

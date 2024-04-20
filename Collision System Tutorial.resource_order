@@ -1,5 +1,5 @@
 {
-  "FolderOrderSettings": [
+  "FolderOrderSettings":[
     {"name":"Libraries","order":6,"path":"folders/Libraries.yy",},
     {"name":"Input","order":1,"path":"folders/Libraries/Input.yy",},
     {"name":"Player","order":2,"path":"folders/Objects/Player.yy",},
@@ -9,20 +9,22 @@
     {"name":"Collision","order":3,"path":"folders/Systems/Collision.yy",},
     {"name":"Tile Sets","order":4,"path":"folders/Tile Sets.yy",},
   ],
-  "ResourceOrderSettings": [
-    {"name":"sprTileset","order":3,"path":"sprites/sprTileset/sprTileset.yy",},
-    {"name":"sprPlayer","order":1,"path":"sprites/sprPlayer/sprPlayer.yy",},
-    {"name":"oPlatform","order":1,"path":"objects/oPlatform/oPlatform.yy",},
-    {"name":"tileGeneric","order":1,"path":"tilesets/tileGeneric/tileGeneric.yy",},
-    {"name":"oCollision","order":2,"path":"objects/oCollision/oCollision.yy",},
-    {"name":"sprCollisionTileset","order":2,"path":"sprites/sprCollisionTileset/sprCollisionTileset.yy",},
-    {"name":"oInput","order":2,"path":"objects/oInput/oInput.yy",},
-    {"name":"sprPlatform","order":4,"path":"sprites/sprPlatform/sprPlatform.yy",},
+  "ResourceOrderSettings":[
+    {"name":"Font1","order":8,"path":"fonts/Font1/Font1.yy",},
     {"name":"Readme","order":5,"path":"notes/Readme/Readme.yy",},
-    {"name":"Player_States","order":2,"path":"scripts/Player_States/Player_States.yy",},
-    {"name":"sprStone","order":3,"path":"sprites/sprStone/sprStone.yy",},
-    {"name":"sprCollisionTiles","order":3,"path":"sprites/sprCollisionTiles/sprCollisionTiles.yy",},
+    {"name":"oCollision","order":2,"path":"objects/oCollision/oCollision.yy",},
+    {"name":"oInput","order":2,"path":"objects/oInput/oInput.yy",},
+    {"name":"oPlatform","order":1,"path":"objects/oPlatform/oPlatform.yy",},
+    {"name":"oPlayerTest","order":5,"path":"objects/oPlayerTest/oPlayerTest.yy",},
     {"name":"Collision_System","order":1,"path":"scripts/Collision_System/Collision_System.yy",},
     {"name":"Input_system","order":1,"path":"scripts/Input_system/Input_system.yy",},
+    {"name":"Player_States","order":2,"path":"scripts/Player_States/Player_States.yy",},
+    {"name":"sprCollisionTiles","order":3,"path":"sprites/sprCollisionTiles/sprCollisionTiles.yy",},
+    {"name":"sprCollisionTileset","order":2,"path":"sprites/sprCollisionTileset/sprCollisionTileset.yy",},
+    {"name":"sprPlatform","order":4,"path":"sprites/sprPlatform/sprPlatform.yy",},
+    {"name":"sprPlayer","order":1,"path":"sprites/sprPlayer/sprPlayer.yy",},
+    {"name":"sprStone","order":3,"path":"sprites/sprStone/sprStone.yy",},
+    {"name":"sprTileset","order":3,"path":"sprites/sprTileset/sprTileset.yy",},
+    {"name":"tileGeneric","order":1,"path":"tilesets/tileGeneric/tileGeneric.yy",},
   ],
 }

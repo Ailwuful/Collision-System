@@ -1,21 +1,18 @@
 {
   "$GMObject":"",
-  "%Name":"oPlatform",
+  "%Name":"oPlayerTest",
   "eventList":[
     {"$GMEvent":"","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":12,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"oPlatform",
+  "name":"oPlayerTest",
   "overriddenProperties":[],
   "parent":{
     "name":"Objects",
     "path":"folders/Objects.yy",
   },
-  "parentObjectId":{
-    "name":"oCollision",
-    "path":"objects/oCollision/oCollision.yy",
-  },
+  "parentObjectId":null,
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,
@@ -34,8 +31,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"sprPlatform",
-    "path":"sprites/sprPlatform/sprPlatform.yy",
+    "name":"sprPlayer",
+    "path":"sprites/sprPlayer/sprPlayer.yy",
   },
   "spriteMaskId":null,
   "visible":true,

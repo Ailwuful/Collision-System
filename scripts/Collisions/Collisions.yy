@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "Collisions",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Collision",
-    "path": "folders/Systems/Collision.yy",
+  "$GMScript":"",
+  "%Name":"Collisions",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Collisions",
+  "parent":{
+    "name":"Collision",
+    "path":"folders/Systems/Collision.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

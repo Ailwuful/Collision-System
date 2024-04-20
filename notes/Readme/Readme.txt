@@ -1,10 +1,11 @@
 Welcome to Ailwuful's awesome and robust platformer collision system.
-Which can be adapted to other types of games, of course.
+Which can be adapted to other types of games, of course. I actually adapted this system to a top-down game, but I made plenty of changes.
 
 How does it work?
 
-1. oSystem has a Room Start event that will look for a layer named "Collisions", and upon finding
-one it will automatically create instances of the oCollision object in the room to be used in
+1. oSystem has a Room Start event with a function tilemap_create_collision()
+that will look for a layer named "Collisions", and upon finding one it will 
+automatically create instances of the oCollision object in the room to be used
 as collisions.
 
 2. oCollision has a sprite that has shapes to be collided with and they represent what type of
